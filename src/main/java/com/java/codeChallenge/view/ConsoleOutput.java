@@ -1,6 +1,8 @@
 package com.java.codeChallenge.view;
 
+import com.java.codeChallenge.service.TicketService;
 import com.java.codeChallenge.service.UserService;
+import com.java.codeChallenge.service.impl.TicketServiceImpl;
 import com.java.codeChallenge.service.impl.UserServiceImpl;
 
 import java.util.HashMap;
@@ -13,6 +15,13 @@ import static com.java.codeChallenge.enums.OptionsEnum.SearchOptions.TICKETS;
 import static com.java.codeChallenge.enums.OptionsEnum.SearchOptions.USERS;
 
 public class ConsoleOutput implements ICodeChallengeOutput {
+
+    private UserService userService;
+    private TicketService ticketService;
+    public ConsoleOutput(){
+        userService = new UserServiceImpl();
+        ticketService = new TicketServiceImpl();
+    }
     @Override
     public void create() {
         Scanner scanner = new Scanner(System.in);
@@ -47,7 +56,7 @@ public class ConsoleOutput implements ICodeChallengeOutput {
         if(USERS.value.equals(option)){
             startUserSearch(scanner);
         } else if (TICKETS.value.equals(option)){
-
+            startTicketSearch(scanner);
         } else if (ORGANIZATIONS.value.equals(option)){
 
         } else {
@@ -56,9 +65,13 @@ public class ConsoleOutput implements ICodeChallengeOutput {
 
     }
 
+    private void startTicketSearch(Scanner scanner) {
+        Map<String,String> searchValues = getSearchCriteria(scanner, new HashMap());
+        ticketService.displayResultsByCriteria(searchValues);
+    }
+
     private void startUserSearch(Scanner scanner) {
         Map<String,String> searchValues = getSearchCriteria(scanner, new HashMap());
-        UserService userService = new UserServiceImpl();
         userService.displayResultsByCriteria(searchValues);
 
     }

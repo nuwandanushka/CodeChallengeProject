@@ -1,15 +1,16 @@
 package com.java.codeChallenge.service.impl;
 
+import com.java.codeChallenge.enums.JSONObjectEnum;
 import com.java.codeChallenge.service.UserService;
 import com.java.codeChallenge.storage.JsonObjectStorage;
 import com.java.codeChallenge.template.ConsoleOutputTemplate;
-import com.java.codeChallenge.template.SequentialOutputTemplate;
+import com.java.codeChallenge.template.OutputTemplate;
 import com.java.codeChallenge.validation.ConsoleValidation;
 import org.json.simple.JSONObject;
 
 import java.util.*;
 
-public class UserServiceImpl implements ConsoleOutputTemplate<SequentialOutputTemplate>, UserService, ConsoleValidation {
+public class UserServiceImpl implements ConsoleOutputTemplate, UserService, ConsoleValidation {
 
     @Override
     public Set<JSONObject> fetchUsersByCriteria(Map<String, String> searchValues) {
@@ -64,9 +65,19 @@ public class UserServiceImpl implements ConsoleOutputTemplate<SequentialOutputTe
         displayResults(fetchUsersByCriteria(searchValues));
     }
 
-    @Override
-    public SequentialOutputTemplate getTemplate() {
-        return new SequentialOutputTemplate();
-    }
 
-   }
+    @Override
+    public OutputTemplate getTemplate() {
+        return new OutputTemplate() {
+            @Override
+            public void createOutput(Collection<? extends Map> valueMap) {
+                valueMap.stream().forEach(i -> {
+                    Arrays.asList(JSONObjectEnum.User.values()).forEach(j -> {
+                        System.out.println(j.value+": "+i.get(j.key));
+                    });
+                    System.out.println("======================================================");
+                });
+            }
+        };
+    }
+}
