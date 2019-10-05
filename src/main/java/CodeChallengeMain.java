@@ -7,7 +7,6 @@ import java.util.HashSet;
 
 public class CodeChallengeMain {
     public static void  main (String[] args ){
-        JsonObjectStorage.initializeObjects();
         new CodeChallengeDisplay().display(new ConsoleOutput());
     }
 }

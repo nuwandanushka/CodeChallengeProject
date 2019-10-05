@@ -2,6 +2,7 @@ package com.java.codeChallenge.storage;
 
 
 import com.java.codeChallenge.util.FileUtil;
+import com.java.codeChallenge.util.JSONObjectUtil;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,17 +20,28 @@ import java.util.stream.Collectors;
 
 public class JsonObjectStorage {
 
-    private static List<JSONObject> userList;
-    private static List<JSONObject> ticketList;
-    private static List<JSONObject> organizationList;
+    private static JsonObjectStorage instance = null;
+    private List<JSONObject> userList;
+    private List<JSONObject> ticketList;
+    private List<JSONObject> organizationList;
 
-    public static void initializeObjects(){
-        userList = getJsonArrayByFileName("users.json", getComparatorByKey("_id"));
-        ticketList = getJsonArrayByFileName("tickets.json", getComparatorByKey("_id"));
-        organizationList = getJsonArrayByFileName("organizations.json", getComparatorByKey("_id"));
+    public void initializeObjects(){
+        userList = getJsonObjectListByFileName("users.json", JSONObjectUtil.getComparatorByKeyIfIntValue("_id"));
+        ticketList = getJsonObjectListByFileName("tickets.json", JSONObjectUtil.getComparatorByKey("_id"));
+        organizationList = getJsonObjectListByFileName("organizations.json", JSONObjectUtil.getComparatorByKeyIfIntValue("_id"));
     }
 
-    private static List<JSONObject> getJsonArrayByFileName(String fileName, Comparator<JSONObject> comparator) {
+    public static JsonObjectStorage getInstance(){
+        if (instance == null) {
+            instance = new JsonObjectStorage();
+        }
+        return instance;
+    }
+    private JsonObjectStorage (){
+        initializeObjects();
+    }
+
+    private static List<JSONObject> getJsonObjectListByFileName(String fileName, Comparator<JSONObject> comparator) {
         JSONParser jsonParser = new JSONParser();
         try (FileReader reader = new FileReader(new FileUtil().getFileFromResources(fileName))) {
             Object obj = jsonParser.parse(reader);
@@ -47,32 +59,15 @@ public class JsonObjectStorage {
         return null;
     }
 
-
-    public static Comparator<JSONObject> getComparatorByKey(String key) {
-        Comparator<JSONObject> comparator = Comparator.comparing(o -> String.valueOf(o.get(key)));
-        return comparator;
-    }
-    public static void sortUserListBySortingKey(String key) {
-        Collections.sort(userList, Comparator.comparing(o -> String.valueOf(o.get(key))));
-    }
-
-    public static void sortTicketListBySortingKey(String key) {
-        Collections.sort(ticketList, Comparator.comparing(o -> String.valueOf(o.get(key))));
-    }
-
-    public static void sortOrganizationListBySortingKey(String key) {
-        Collections.sort(organizationList, Comparator.comparing(o -> String.valueOf(o.get(key))));
-    }
-
-    public static List<JSONObject> getUserList() {
+    public List<JSONObject> getUserList() {
         return userList;
     }
 
-    public static List<JSONObject> getTicketList() {
+    public List<JSONObject> getTicketList() {
         return ticketList;
     }
 
-    public static List<JSONObject> getOrganizationList() {
+    public List<JSONObject> getOrganizationList() {
         return organizationList;
     }
 }

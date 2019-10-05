@@ -65,4 +65,27 @@ public class JSONObjectEnum {
             this.value = value;
         }
     }
+
+    public enum Organization {
+        ID("_id","ID"),
+        URL("url","URL"),
+        EXTERNAL_ID("external_id","External Id"),
+        NAME("name","Name"),
+        DOMAIN_NAMES("domain_names","Domain Names"),
+        CREATED_AT("created_at","Created at"),
+        DETAILS("details","Details"),
+        SHARED_TICKETS("shared_tickets","Shared Tickets"),
+        TAGS("tags","TAGS"),
+        TICKET_SUBJECT("ticket_subject","Ticket subject"),
+        USER_NAME("user_name","User Name");
+
+
+        public String key;
+        public  String value;
+
+        Organization(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
 }

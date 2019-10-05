@@ -1,9 +1,12 @@
 package com.java.codeChallenge.view;
 
+import com.java.codeChallenge.service.OrganizationService;
 import com.java.codeChallenge.service.TicketService;
 import com.java.codeChallenge.service.UserService;
+import com.java.codeChallenge.service.impl.OrganizationServiceImpl;
 import com.java.codeChallenge.service.impl.TicketServiceImpl;
 import com.java.codeChallenge.service.impl.UserServiceImpl;
+import com.java.codeChallenge.storage.JsonObjectStorage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,9 +21,11 @@ public class ConsoleOutput implements ICodeChallengeOutput {
 
     private UserService userService;
     private TicketService ticketService;
+    private OrganizationService organizationService;
     public ConsoleOutput(){
         userService = new UserServiceImpl();
         ticketService = new TicketServiceImpl();
+        organizationService = new OrganizationServiceImpl();
     }
     @Override
     public void create() {
@@ -58,7 +63,7 @@ public class ConsoleOutput implements ICodeChallengeOutput {
         } else if (TICKETS.value.equals(option)){
             startTicketSearch(scanner);
         } else if (ORGANIZATIONS.value.equals(option)){
-
+            startOrganizationSearch(scanner);
         } else {
             searchOption(scanner);
         }
@@ -73,7 +78,11 @@ public class ConsoleOutput implements ICodeChallengeOutput {
     private void startUserSearch(Scanner scanner) {
         Map<String,String> searchValues = getSearchCriteria(scanner, new HashMap());
         userService.displayResultsByCriteria(searchValues);
+    }
 
+    private void startOrganizationSearch(Scanner scanner) {
+        Map<String,String> searchValues = getSearchCriteria(scanner, new HashMap());
+        organizationService.displayResultsByCriteria(searchValues);
     }
 
     private Map<String, String> getSearchCriteria(Scanner scanner, Map map) {

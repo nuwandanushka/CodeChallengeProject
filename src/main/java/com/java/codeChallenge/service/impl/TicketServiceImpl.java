@@ -1,16 +1,18 @@
 package com.java.codeChallenge.service.impl;
 
 import com.java.codeChallenge.enums.JSONObjectEnum;
+import com.java.codeChallenge.framework.service.BaseJSONObjectService;
 import com.java.codeChallenge.service.TicketService;
 import com.java.codeChallenge.storage.JsonObjectStorage;
 import com.java.codeChallenge.template.ConsoleOutputTemplate;
 import com.java.codeChallenge.template.OutputTemplate;
+import com.java.codeChallenge.util.JSONObjectUtil;
 import com.java.codeChallenge.validation.ConsoleValidation;
 import org.json.simple.JSONObject;
 
 import java.util.*;
 
-public class TicketServiceImpl implements TicketService, ConsoleOutputTemplate, ConsoleValidation {
+public class TicketServiceImpl extends BaseJSONObjectService implements TicketService, ConsoleOutputTemplate, ConsoleValidation {
 
 
 
@@ -18,7 +20,7 @@ public class TicketServiceImpl implements TicketService, ConsoleOutputTemplate, 
     public Set<JSONObject> fetchTicketsByCriteria(Map<String, String> searchValues) {
         Set<JSONObject> ticketByCriteria = new HashSet<>();
         Optional.ofNullable(searchValues).ifPresent(i ->{
-            JsonObjectStorage.getTicketList().stream()
+            getJsonObjectStorage().getTicketList().stream()
                     .filter(ticket -> isJsonObjectContains(ticket, searchValues))
                     .forEach(filteredTicket ->{
                         setOrganizationNameByTicket(filteredTicket);
@@ -32,31 +34,25 @@ public class TicketServiceImpl implements TicketService, ConsoleOutputTemplate, 
     }
 
     private void setAssigneeNameByTicket(JSONObject filteredTicket) {
-        JSONObject orgId = new JSONObject();
-        orgId.put("_id", filteredTicket.get("assignee_id"));
-        int orgIdIndex = Collections.binarySearch(JsonObjectStorage.getUserList()
-                , orgId, JsonObjectStorage.getComparatorByKey("_id"));
-        filteredTicket.put("assignee_name"
-                ,(0 <= orgIdIndex) ? JsonObjectStorage.getUserList().get(orgIdIndex).get("name"):"");
+        JSONObject assigneeId = new JSONObject();
+        assigneeId.put("_id", filteredTicket.get("assignee_id"));
+        Optional.ofNullable(getBinarySearchMatch(getJsonObjectStorage().getUserList(),assigneeId
+                , JSONObjectUtil.getComparatorByKeyIfIntValue("_id"))).ifPresent(i-> filteredTicket.put("assignee_name", i.get("name")));
 
     }
 
     private void setSubmitterNameByTicket(JSONObject filteredTicket) {
-        JSONObject orgId = new JSONObject();
-        orgId.put("_id", filteredTicket.get("submitter_id"));
-        int orgIdIndex = Collections.binarySearch(JsonObjectStorage.getUserList()
-                , orgId, JsonObjectStorage.getComparatorByKey("_id"));
-            filteredTicket.put("submitter_name"
-                    ,(0 <= orgIdIndex) ? JsonObjectStorage.getUserList().get(orgIdIndex).get("name"):"");
+        JSONObject submitterId = new JSONObject();
+        submitterId.put("_id", filteredTicket.get("submitter_id"));
+        Optional.ofNullable(getBinarySearchMatch(getJsonObjectStorage().getUserList(),submitterId
+                , JSONObjectUtil.getComparatorByKeyIfIntValue("_id"))).ifPresent(i-> filteredTicket.put("submitter_name", i.get("name")));
     }
 
     private void setOrganizationNameByTicket(JSONObject filteredTicket) {
         JSONObject orgId = new JSONObject();
         orgId.put("_id", filteredTicket.get("organization_id"));
-        int orgIdIndex = Collections.binarySearch(JsonObjectStorage.getOrganizationList()
-                , orgId, JsonObjectStorage.getComparatorByKey("_id"));
-            filteredTicket.put("organization_name"
-                    ,(0 <= orgIdIndex) ? JsonObjectStorage.getOrganizationList().get(orgIdIndex).get("name"):"");
+        Optional.ofNullable(getBinarySearchMatch(getJsonObjectStorage().getOrganizationList(),orgId
+                , JSONObjectUtil.getComparatorByKeyIfIntValue("_id"))).ifPresent(i-> filteredTicket.put("organization_name", i.get("name")));
     }
 
     @Override
@@ -66,16 +62,11 @@ public class TicketServiceImpl implements TicketService, ConsoleOutputTemplate, 
 
     @Override
     public OutputTemplate getTemplate() {
-        return new OutputTemplate() {
-            @Override
-            public void createOutput(Collection<? extends Map> valueMap) {
-                valueMap.stream().forEach(i -> {
-                    Arrays.asList(JSONObjectEnum.Ticket.values()).forEach(j -> {
-                        System.out.println(j.value+": "+i.get(j.key));
-                    });
-                    System.out.println("======================================================");
-                });
-            }
-        };
+        return valueMap -> valueMap.stream().forEach(i -> {
+            Arrays.asList(JSONObjectEnum.Ticket.values()).forEach(j -> {
+                System.out.println(j.value+": "+JSONObjectUtil.getStringByObject(i.get(j.key)));
+            });
+            System.out.println("======================================================");
+        });
     }
 }
