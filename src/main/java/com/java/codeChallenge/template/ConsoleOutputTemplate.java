@@ -1,12 +1,13 @@
 package com.java.codeChallenge.template;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-public interface ConsoleOutputTemplate<T extends OutputTemplate> {
+public interface ConsoleOutputTemplate {
 
-    default void displayResults(Set<? extends Map> valueMap){
+    default void displayResults(Collection<? extends Map> valueMap){
         getTemplate().createOutput(valueMap);
     }
 
-    public T getTemplate();
+    OutputTemplate getTemplate();
 }
