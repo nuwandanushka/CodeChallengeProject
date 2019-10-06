@@ -1,6 +1,8 @@
 package com.java.codeChallenge.storage;
 
 
+import com.java.codeChallenge.enums.ErrorCodeEnum;
+import com.java.codeChallenge.exception.CodeChallengeException;
 import com.java.codeChallenge.util.FileUtil;
 import com.java.codeChallenge.util.JSONObjectUtil;
 import org.json.simple.JSONArray;
@@ -50,13 +52,12 @@ public class JsonObjectStorage {
             return objectList;
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new CodeChallengeException(ErrorCodeEnum.FILE_NOT_FOUND);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new CodeChallengeException(ErrorCodeEnum.PARSE_EXCEPTION);
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new CodeChallengeException(ErrorCodeEnum.PARSE_EXCEPTION);
         }
-        return null;
     }
 
     public List<JSONObject> getUserList() {
