@@ -21,10 +21,10 @@ public class UserTest {
         JsonObjectStorage storage = mock(JsonObjectStorage.class);
 
         JSONObject jsonObject1 = new JSONObject();
-        jsonObject1.put("_id","2");
+        jsonObject1.put("_id",2);
 
         JSONObject jsonObject2 = new JSONObject();
-        jsonObject2.put("_id","3");
+        jsonObject2.put("_id",3);
 
         List<JSONObject> userList = new ArrayList<>();
         userList.add(jsonObject1);
@@ -51,11 +51,11 @@ public class UserTest {
         JsonObjectStorage storage = mock(JsonObjectStorage.class);
 
         JSONObject jsonObject1 = new JSONObject();
-        jsonObject1.put("_id","2");
+        jsonObject1.put("_id",2);
         jsonObject1.put("name","Nuwan");
 
         JSONObject jsonObject2 = new JSONObject();
-        jsonObject2.put("_id","3");
+        jsonObject2.put("_id",3);
         jsonObject2.put("name","danushka");
 
         List<JSONObject> userList = new ArrayList<>();
@@ -87,19 +87,19 @@ public class UserTest {
         JsonObjectStorage storage = mock(JsonObjectStorage.class);
 
         JSONObject jsonUser1 = new JSONObject();
-        jsonUser1.put("_id","2");
-        jsonUser1.put("organization_id","15");
+        jsonUser1.put("_id",2);
+        jsonUser1.put("organization_id",15);
 
         JSONObject jsonUser2 = new JSONObject();
-        jsonUser2.put("_id","3");
-        jsonUser2.put("organization_id","16");
+        jsonUser2.put("_id",3);
+        jsonUser2.put("organization_id",16);
 
         JSONObject jsonOrganization1 = new JSONObject();
-        jsonOrganization1.put("_id","15");
+        jsonOrganization1.put("_id",15);
         jsonOrganization1.put("name","Rasmussen");
 
         JSONObject jsonOrganization2 = new JSONObject();
-        jsonOrganization2.put("_id","3");
+        jsonOrganization2.put("_id",3);
         jsonOrganization2.put("name","Barlow");
 
         List<JSONObject> userList = new ArrayList<>();
@@ -133,21 +133,21 @@ public class UserTest {
         JsonObjectStorage storage = mock(JsonObjectStorage.class);
 
         JSONObject jsonUser1 = new JSONObject();
-        jsonUser1.put("_id","9");
-        jsonUser1.put("organization_id","15");
+        jsonUser1.put("_id",9);
+        jsonUser1.put("organization_id",15);
 
         JSONObject jsonUser2 = new JSONObject();
-        jsonUser2.put("_id","3");
-        jsonUser2.put("organization_id","16");
+        jsonUser2.put("_id",3);
+        jsonUser2.put("organization_id",16);
 
         JSONObject jsonTicket1 = new JSONObject();
-        jsonTicket1.put("submitter_id","9");
-        jsonTicket1.put("assignee_id","12");
+        jsonTicket1.put("submitter_id",9);
+        jsonTicket1.put("assignee_id",12);
         jsonTicket1.put("subject","A Catastrophe in Hungary");
 
         JSONObject jsonTicket2 = new JSONObject();
-        jsonTicket2.put("submitter_id","65");
-        jsonTicket2.put("assignee_id","13");
+        jsonTicket2.put("submitter_id",65);
+        jsonTicket2.put("assignee_id",13);
         jsonTicket2.put("subject","A Problem in Morocco");
 
         List<JSONObject> userList = new ArrayList<>();
@@ -180,21 +180,21 @@ public class UserTest {
         JsonObjectStorage storage = mock(JsonObjectStorage.class);
 
         JSONObject jsonUser1 = new JSONObject();
-        jsonUser1.put("_id","9");
-        jsonUser1.put("organization_id","15");
+        jsonUser1.put("_id",9);
+        jsonUser1.put("organization_id",15);
 
         JSONObject jsonUser2 = new JSONObject();
-        jsonUser2.put("_id","12");
-        jsonUser2.put("organization_id","16");
+        jsonUser2.put("_id",12);
+        jsonUser2.put("organization_id",16);
 
         JSONObject jsonTicket1 = new JSONObject();
-        jsonTicket1.put("submitter_id","9");
-        jsonTicket1.put("assignee_id","12");
+        jsonTicket1.put("submitter_id",15);
+        jsonTicket1.put("assignee_id",9);
         jsonTicket1.put("subject","A Catastrophe in Hungary");
 
         JSONObject jsonTicket2 = new JSONObject();
-        jsonTicket2.put("submitter_id","12");
-        jsonTicket2.put("assignee_id","13");
+        jsonTicket2.put("submitter_id",9);
+        jsonTicket2.put("assignee_id",13);
         jsonTicket2.put("subject","A Problem in Morocco");
 
         List<JSONObject> userList = new ArrayList<>();
@@ -229,29 +229,29 @@ public class UserTest {
         JsonObjectStorage storage = mock(JsonObjectStorage.class);
 
         JSONObject jsonUser1 = new JSONObject();
-        jsonUser1.put("_id","9");
-        jsonUser1.put("organization_id","15");
+        jsonUser1.put("_id",9);
+        jsonUser1.put("organization_id",15);
 
         JSONObject jsonUser2 = new JSONObject();
-        jsonUser2.put("_id","12");
-        jsonUser2.put("organization_id","16");
+        jsonUser2.put("_id",12);
+        jsonUser2.put("organization_id",16);
 
         JSONObject jsonTicket1 = new JSONObject();
-        jsonTicket1.put("submitter_id","9");
-        jsonTicket1.put("assignee_id","12");
+        jsonTicket1.put("submitter_id",9);
+        jsonTicket1.put("assignee_id",12);
         jsonTicket1.put("subject","A Catastrophe in Hungary");
 
         JSONObject jsonTicket2 = new JSONObject();
-        jsonTicket2.put("submitter_id","12");
-        jsonTicket2.put("assignee_id","13");
+        jsonTicket2.put("submitter_id",12);
+        jsonTicket2.put("assignee_id",13);
         jsonTicket2.put("subject","A Problem in Morocco");
 
         JSONObject jsonOrganization1 = new JSONObject();
-        jsonOrganization1.put("_id","15");
+        jsonOrganization1.put("_id",15);
         jsonOrganization1.put("name","Rasmussen");
 
         JSONObject jsonOrganization2 = new JSONObject();
-        jsonOrganization2.put("_id","16");
+        jsonOrganization2.put("_id",16);
         jsonOrganization2.put("name","Barlow");
 
         List<JSONObject> userList = new ArrayList<>();

@@ -3,7 +3,6 @@ package com.java.codeChallenge.service.impl;
 import com.java.codeChallenge.enums.JSONObjectEnum;
 import com.java.codeChallenge.framework.service.BaseJSONObjectService;
 import com.java.codeChallenge.service.UserService;
-import com.java.codeChallenge.storage.JsonObjectStorage;
 import com.java.codeChallenge.template.ConsoleOutputTemplate;
 import com.java.codeChallenge.template.OutputTemplate;
 import com.java.codeChallenge.util.JSONObjectUtil;
@@ -18,7 +17,8 @@ public class UserServiceImpl extends BaseJSONObjectService implements ConsoleOut
     public Set<JSONObject> fetchUsersByCriteria(Map<String, String> searchValues) {
         Set<JSONObject> usersByCriteria = new HashSet<>();
         Optional.ofNullable(searchValues).ifPresent(i ->{
-                getJsonObjectStorage().getUserList().stream()
+                getJsonObjectStorage().getUserList()
+                        .stream()
                         .filter(user -> isJsonObjectContains(user, searchValues))
                         .forEach(filteredUser ->{
                             setOrganizationNameByOrgId(filteredUser);
@@ -31,28 +31,28 @@ public class UserServiceImpl extends BaseJSONObjectService implements ConsoleOut
     }
 
     private void setAssigneeSubjectByUserId(JSONObject filteredUser) {
-        List<JSONObject> sortedTicketList = JSONObjectUtil.getSortListIfCompareValueIsInt("assignee_id", getJsonObjectStorage().getTicketList());
+        List<JSONObject> sortedTicketList = JSONObjectUtil.getSortListIfCompareValueIsInt(JSONObjectEnum.Ticket.ASSIGNEE_ID.key, getJsonObjectStorage().getTicketList());
         JSONObject assigneeId = new JSONObject();
-        assigneeId.put("assignee_id", filteredUser.get("_id"));
-        Optional.ofNullable(getBinarySearchMultipleMatches(sortedTicketList, assigneeId,"assignee_id"
-                ,JSONObjectUtil.getComparatorIfSortedValueInt("assignee_id")))
-                .ifPresent(i -> filteredUser.put("assignee_ticket_subject", getStringByListAndKey("subject",i)));
+        assigneeId.put(JSONObjectEnum.Ticket.ASSIGNEE_ID.key, filteredUser.get(JSONObjectEnum.User.ID.key));
+        Optional.ofNullable(getBinarySearchMultipleMatches(sortedTicketList, assigneeId,JSONObjectEnum.Ticket.ASSIGNEE_ID.key
+                ,JSONObjectUtil.getComparatorIfSortedValueInt(JSONObjectEnum.Ticket.ASSIGNEE_ID.key)))
+                .ifPresent(i -> filteredUser.put(JSONObjectEnum.User.ASSIGNEE_NAME.key, getStringByListAndKey(JSONObjectEnum.Ticket.SUBJECT.key,i)));
     }
 
     private void setSubmittedSubjectByUserId(JSONObject filteredUser) {
-        List<JSONObject> sortedTicketList = JSONObjectUtil.getSortListIfCompareValueIsInt("submitter_id", getJsonObjectStorage().getTicketList());
+        List<JSONObject> sortedTicketList = JSONObjectUtil.getSortListIfCompareValueIsInt(JSONObjectEnum.Ticket.SUBMITTER_ID.key, getJsonObjectStorage().getTicketList());
         JSONObject submitterId = new JSONObject();
-        submitterId.put("submitter_id", filteredUser.get("_id"));
-        Optional.ofNullable(getBinarySearchMultipleMatches(sortedTicketList, submitterId,"submitter_id"
-                ,JSONObjectUtil.getComparatorIfSortedValueInt("submitter_id")))
-                .ifPresent(i -> filteredUser.put("submitted_ticket_subject", getStringByListAndKey("subject",i)));
+        submitterId.put(JSONObjectEnum.Ticket.SUBMITTER_ID.key, filteredUser.get(JSONObjectEnum.User.ID.key));
+        Optional.ofNullable(getBinarySearchMultipleMatches(sortedTicketList, submitterId,JSONObjectEnum.Ticket.SUBMITTER_ID.key
+                ,JSONObjectUtil.getComparatorIfSortedValueInt(JSONObjectEnum.Ticket.SUBMITTER_ID.key)))
+                .ifPresent(i -> filteredUser.put(JSONObjectEnum.User.SUBMITTER_NAME.key, getStringByListAndKey(JSONObjectEnum.Ticket.SUBJECT.key,i)));
     }
 
     private void setOrganizationNameByOrgId(JSONObject filteredUser) {
         JSONObject orgId = new JSONObject();
-        orgId.put("_id", filteredUser.get("organization_id"));
-        Optional.ofNullable(getBinarySearchMatch(getJsonObjectStorage().getOrganizationList(),orgId, JSONObjectUtil.getComparatorIfSortedValueInt("_id")))
-                .ifPresent(i -> filteredUser.put("organization_name", i.get("name")));
+        orgId.put(JSONObjectEnum.Organization.ID.key, filteredUser.get(JSONObjectEnum.User.ORGANIZATION_ID.key));
+        Optional.ofNullable(getBinarySearchMatch(getJsonObjectStorage().getOrganizationList(),orgId, JSONObjectUtil.getComparatorIfSortedValueInt(JSONObjectEnum.Organization.ID.key)))
+                .ifPresent(i -> filteredUser.put(JSONObjectEnum.User.ORGANIZATION_NAME.key, i.get(JSONObjectEnum.Organization.NAME.key)));
        }
 
     @Override

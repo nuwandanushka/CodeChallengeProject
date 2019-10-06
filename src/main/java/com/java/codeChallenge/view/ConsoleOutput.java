@@ -1,5 +1,6 @@
 package com.java.codeChallenge.view;
 
+import com.java.codeChallenge.enums.JSONObjectEnum;
 import com.java.codeChallenge.service.OrganizationService;
 import com.java.codeChallenge.service.TicketService;
 import com.java.codeChallenge.service.UserService;
@@ -8,6 +9,7 @@ import com.java.codeChallenge.service.impl.TicketServiceImpl;
 import com.java.codeChallenge.service.impl.UserServiceImpl;
 import com.java.codeChallenge.storage.JsonObjectStorage;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -45,7 +47,7 @@ public class ConsoleOutput implements ICodeChallengeOutput {
         if(SEARCH.value.equals(option)){
             searchOption(scanner);
         } else if (VIEW.value.equals(option)){
-
+            viewSearchFields();
         } else if (QUIET.value.equalsIgnoreCase(option)){
             scanner.close();
             return;
@@ -53,6 +55,52 @@ public class ConsoleOutput implements ICodeChallengeOutput {
             mainSearchOptions(scanner);
 
 
+    }
+
+    private void viewSearchFields() {
+        viewUserSearchFields();
+        viewTicketSearchFields();
+        viewOrganizationSearchFields();
+    }
+
+    private void viewTicketSearchFields() {
+        System.out.println("Ticket search terms");
+        System.out.println("---------------------------");
+        for(JSONObjectEnum.Ticket ticket :JSONObjectEnum.Ticket.values()){
+            if(!ticket.key.equals(JSONObjectEnum.Ticket.ASSIGNEE_NAME.key)
+                    &&  !ticket.key.equals(JSONObjectEnum.Ticket.SUBMITTER_NAME.key)
+                    &&  !ticket.key.equals(JSONObjectEnum.Ticket.ORGANIZATION_NAME.key)){
+                System.out.println(ticket.key);
+            }
+        }
+        System.out.println("============================================================");
+
+    }
+
+    private void viewOrganizationSearchFields() {
+        System.out.println("Organization search terms");
+        System.out.println("---------------------------");
+        for(JSONObjectEnum.Organization organization :JSONObjectEnum.Organization.values()){
+            if(!organization.key.equals(JSONObjectEnum.Organization.USER_NAME.key)
+                    &&  !organization.key.equals(JSONObjectEnum.Organization.TICKET_SUBJECT.key)){
+                System.out.println(organization.key);
+            }
+        }
+        System.out.println("============================================================");
+
+    }
+
+    private void viewUserSearchFields() {
+        System.out.println("Users search terms");
+        System.out.println("------------------");
+        for(JSONObjectEnum.User user :JSONObjectEnum.User.values()){
+            if(!user.key.equals(JSONObjectEnum.User.ORGANIZATION_NAME.key)
+                    &&  !user.key.equals(JSONObjectEnum.User.SUBMITTER_NAME.key)
+                    &&  !user.key.equals(JSONObjectEnum.User.ASSIGNEE_NAME.key)){
+                System.out.println(user.key);
+            }
+        }
+        System.out.println("============================================================");
     }
 
     private void searchOption(Scanner scanner) {

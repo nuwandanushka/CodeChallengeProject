@@ -1,9 +1,8 @@
 package com.java.codeChallenge.service.impl;
 
 import com.java.codeChallenge.enums.JSONObjectEnum;
-import com.java.codeChallenge.service.OrganizationService;
 import com.java.codeChallenge.framework.service.BaseJSONObjectService;
-import com.java.codeChallenge.storage.JsonObjectStorage;
+import com.java.codeChallenge.service.OrganizationService;
 import com.java.codeChallenge.template.ConsoleOutputTemplate;
 import com.java.codeChallenge.template.OutputTemplate;
 import com.java.codeChallenge.util.JSONObjectUtil;
@@ -11,6 +10,8 @@ import com.java.codeChallenge.validation.ConsoleValidation;
 import org.json.simple.JSONObject;
 
 import java.util.*;
+
+import static com.java.codeChallenge.enums.JSONObjectEnum.Ticket.ORGANIZATION_ID;
 
 public class OrganizationServiceImpl extends BaseJSONObjectService implements OrganizationService, ConsoleOutputTemplate, ConsoleValidation {
 
@@ -28,33 +29,34 @@ public class OrganizationServiceImpl extends BaseJSONObjectService implements Or
     public Set<JSONObject> fetchOrganizationByCriteria(Map<String, String> searchValues) {
         Set<JSONObject> usersByCriteria = new HashSet<>();
         Optional.ofNullable(searchValues).ifPresent(i ->{
-            getJsonObjectStorage().getOrganizationList().stream()
-                    .filter(user -> isJsonObjectContains(user, searchValues))
-                    .forEach(filteredUser ->{
-                        setTicketSubjectByOrgId(filteredUser);
-                        setUserNameByOrgId(filteredUser);
-                        usersByCriteria.add(filteredUser);
+            getJsonObjectStorage().getOrganizationList()
+                    .stream()
+                    .filter(organization -> isJsonObjectContains(organization, searchValues))
+                    .forEach(filteredOrganization ->{
+                        setTicketSubjectByOrgId(filteredOrganization);
+                        setUserNameByOrgId(filteredOrganization);
+                        usersByCriteria.add(filteredOrganization);
                     });
         });
         return usersByCriteria;
     }
 
-    private void setTicketSubjectByOrgId(JSONObject filteredUser) {
-        List<JSONObject> sortedTicketList = JSONObjectUtil.getSortListIfCompareValueIsInt("organization_id", getJsonObjectStorage().getTicketList());
+    private void setTicketSubjectByOrgId(JSONObject filteredOrganization) {
+        List<JSONObject> sortedTicketList = JSONObjectUtil.getSortListIfCompareValueIsInt(ORGANIZATION_ID.key, getJsonObjectStorage().getTicketList());
         JSONObject orgId = new JSONObject();
-        orgId.put("organization_id", filteredUser.get("_id"));
-        Optional.ofNullable(getBinarySearchMultipleMatches(sortedTicketList, orgId,"organization_id"
-                ,JSONObjectUtil.getComparatorIfSortedValueInt("organization_id")))
-                .ifPresent(i -> filteredUser.put("ticket_subject", getStringByListAndKey("subject",i)));
+        orgId.put(ORGANIZATION_ID.key, filteredOrganization.get(JSONObjectEnum.Organization.ID.key));
+        Optional.ofNullable(getBinarySearchMultipleMatches(sortedTicketList, orgId,ORGANIZATION_ID.key
+                ,JSONObjectUtil.getComparatorIfSortedValueInt(ORGANIZATION_ID.key)))
+                .ifPresent(i -> filteredOrganization.put(JSONObjectEnum.Organization.TICKET_SUBJECT.key, getStringByListAndKey(JSONObjectEnum.Ticket.SUBJECT.key,i)));
     }
 
-    private void setUserNameByOrgId(JSONObject filteredUser) {
-        List<JSONObject> sortedUserList = JSONObjectUtil.getSortListIfCompareValueIsInt("organization_id", getJsonObjectStorage().getUserList());
+    private void setUserNameByOrgId(JSONObject filteredOrganization) {
+        List<JSONObject> sortedUserList = JSONObjectUtil.getSortListIfCompareValueIsInt(ORGANIZATION_ID.key, getJsonObjectStorage().getUserList());
         JSONObject orgId = new JSONObject();
-        orgId.put("organization_id", filteredUser.get("_id"));
-        Optional.ofNullable(getBinarySearchMultipleMatches(sortedUserList, orgId,"organization_id"
-                ,JSONObjectUtil.getComparatorIfSortedValueInt("organization_id")))
-                .ifPresent(i -> filteredUser.put("user_name", getStringByListAndKey("name",i)));
+        orgId.put(ORGANIZATION_ID.key, filteredOrganization.get(JSONObjectEnum.Organization.ID.key));
+        Optional.ofNullable(getBinarySearchMultipleMatches(sortedUserList, orgId,ORGANIZATION_ID.key
+                ,JSONObjectUtil.getComparatorIfSortedValueInt(ORGANIZATION_ID.key)))
+                .ifPresent(i -> filteredOrganization.put(JSONObjectEnum.Organization.USER_NAME.key, getStringByListAndKey(JSONObjectEnum.User.NAME.key,i)));
     }
 
     @Override
